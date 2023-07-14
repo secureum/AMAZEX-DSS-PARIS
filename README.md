@@ -140,6 +140,12 @@ forge test --match-path test/ChallengeX.t.sol -vvvv
 
 ---
 
+# **Slides**
+
+Find the slides of the event's presentation [here](./presentation/A-MAZE-X%2C%20Secureum%20at%20DeFi%20Security%20101%20Paris.pdf).
+
+---
+
 # **CTF Writeup** 🗒️🗒️🗒️
 
 **_Writeups will be available after the event_**
