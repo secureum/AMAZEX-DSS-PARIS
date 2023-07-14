@@ -59,9 +59,8 @@ The following setup tutorial will guide you through the installation of `Foundry
 Run the command below to clone this repository into your local machine
 
 ```bash
-git clone git@github.com: ... .git
-cd DeFi-Security-Summit-Stanford
-git checkout foundry
+git clone https://github.com/secureum/AMAZEX-DSS-PARIS.git
+cd AMAZEX-DSS-PARIS
 ```
 
 <br>
