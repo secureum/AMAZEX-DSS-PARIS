@@ -19,7 +19,7 @@ import {PosiCoin} from "../src/4_RescuePosi/PosiCoin.sol";
 contract Challenge4Test is Test {
     VaultFactory public FACTORY;
     PosiCoin public POSI;
-    address public unclaimedAddress = 0x70E194050d9c9c949b3061CC7cF89dF9c6782b7F;
+    address public unclaimedAddress = 0x92fF93023d916bC4580B535a077601d5cda5665E;
     address public whitehat = makeAddr("whitehat");
     address public devs = makeAddr("devs");
 
