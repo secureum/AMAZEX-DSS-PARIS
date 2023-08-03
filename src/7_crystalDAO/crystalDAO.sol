@@ -72,6 +72,7 @@ contract DaoVaultImplementation is Initializable, EIP712Upgradeable {
         assembly {
             sstore(0, _owner)
         }
+        
     }
 
     /**

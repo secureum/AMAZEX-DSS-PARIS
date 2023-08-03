@@ -57,6 +57,8 @@ contract YieldPool is ERC20("Safe Yield Pool", "syLP"), IERC3156FlashLender {
         external
         returns (bool)
     {
+        // 10000
+        // 
         require(amount <= maxFlashLoan(token), "not enough currency");
 
         uint256 expected;
@@ -105,6 +107,15 @@ contract YieldPool is ERC20("Safe Yield Pool", "syLP"), IERC3156FlashLender {
         uint256 liquidity;
         uint256 ethBalance = address(this).balance;
         uint256 tokenReserve = getReserve();
+        
+/***
+ * 
+ *  ethreserve = 9999
+ *  tokenamount=0
+ *  _amount=1
+ *  10,000/9999
+ *  
+ */
 
         if (tokenReserve == 0) {
             TOKEN.transferFrom(msg.sender, address(this), _amount);
@@ -112,6 +123,9 @@ contract YieldPool is ERC20("Safe Yield Pool", "syLP"), IERC3156FlashLender {
             liquidity = ethBalance;
             _mint(msg.sender, liquidity);
         } else {
+            // ethreserve = 5000-1
+            // tokenAmount =0
+            // 
             uint256 ethReserve = ethBalance - msg.value;
 
             uint256 tokenAmount = (msg.value * tokenReserve) / (ethReserve);
@@ -130,6 +144,16 @@ contract YieldPool is ERC20("Safe Yield Pool", "syLP"), IERC3156FlashLender {
      * @param _amount Amount of liquidity tokens to be turned in
      * @return Amount of (ETH, TOKEN) which have been returned
      */
+
+    // victim.removeLiquidity(1)
+    // ethReserve  10000
+    // totalSupply 20000
+    // 100000000/20000
+    // ethamount =5000 ether
+    // tokenAmount = 0
+    // burn 10,000 LP
+    // 
+
     function removeLiquidity(uint256 _amount) public returns (uint256, uint256) {
         require(_amount > 0, "_amount should be greater than zero");
         uint256 ethReserve = address(this).balance;
@@ -155,9 +179,13 @@ contract YieldPool is ERC20("Safe Yield Pool", "syLP"), IERC3156FlashLender {
         returns (uint256)
     {
         require(_inputReserve > 0 && _outputReserve > 0, "invalid reserves");
+       // 4000*99=400000        
         uint256 inputAmountWithFee = _inputAmount * 99;
+        // 400000 * 1000 =  500000000  
+        // 500000 + 400000 =900000 
         uint256 numerator = inputAmountWithFee * _outputReserve;
         uint256 denominator = (_inputReserve * 100) + inputAmountWithFee;
+        // 5
         return numerator / denominator;
     }
 
